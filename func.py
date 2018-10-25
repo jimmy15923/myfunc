@@ -18,8 +18,10 @@ def mask_color_img(img, mask, color=[0, 255, 255], alpha=0.3):
   
 def IOU(y_true, y_pred, is_onehot=False, threshold=0.5):
     '''
-    y_true: Groud
-    y_pred: 
+    y_true: Groud truth array, shape=[x_size, y_size, channels]
+    y_pred: predicted array, shape=[x_size, y_size, class]
+    is_onehot: Boolean, is label been onehot encoding
+    threshold: for binarizing prediction
     Ref: http://www.pyimagesearch.com/2016/03/07/transparent-overlays-with-opencv/
     '''  
     if is_onehot:
