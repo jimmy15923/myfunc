@@ -36,3 +36,21 @@ def IOU(y_true, y_pred, is_onehot=False, threshold=0.5):
     
     iou = intersection / union
     return iou
+
+
+def contrast_stretch_3d(data_arr):
+    '''Stretch the contract on 3D image
+    data_arr: 3D numpy array, shape should be (N, H, W, C)
+    
+    returns:
+    3D np array with contrast stretched and scaled to [0, 1]
+    '''
+    from skimage import exposure
+    arr = np.zeros(data_arr.shape)
+    for n in range(len(data_arr)):
+        for i in range(len(data_arr[0,0,0])):
+            img = (data_arr[n,:,:,i]).astype("uint8")
+            p2, p98 = np.percentile(img, (2, 98))
+            img_rescale = exposure.rescale_intensity(img, in_range=(p2, p98))
+            arr[n,:,:,i] = img_rescale / (255.0)
+    return arr
