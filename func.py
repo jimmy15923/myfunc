@@ -54,3 +54,27 @@ def contrast_stretch_3d(data_arr):
             img_rescale = exposure.rescale_intensity(img, in_range=(p2, p98))
             arr[n,:,:,i] = img_rescale / (255.0)
     return arr
+
+
+def binary_mask_to_vertices(mask):
+    '''Turn the binary mask into vertices
+    Args:
+        - mask: shape = [height, width], with all (0, 1) or boolean mask
+    Return:
+        - vertices, shape = [N, 2], in [width, height]
+    '''  
+    mask_typeint = mask.astype(np.uint8) * 255
+    vertices = cv2.findContours(mask_typeint, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_NONE)
+    
+    print("Found {} vertices".format(vertices[1][0][:,0,:].shape[0]))
+    
+    # test if vertices generated correct by ploting vertices to mask
+#     plot_mask = np.zeros(shape=mask.shape) 
+#     cv2.fillPoly(plot_mask, [vertices[1][0].astype(np.int32)], [1])
+    
+#     plt.imshow(plot_mask)
+#     plt.show()
+#     np.testing.assert_allclose(mask, plot_mask, atol=1000, err_msg="output vertices can't recontruct\
+#                                binary mask, check if any holes or fractions in origin mask")
+       
+    return vertices[1][0][:,0,:]
